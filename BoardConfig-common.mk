@@ -15,7 +15,6 @@
 #
 
 TARGET_BOARD_PLATFORM := sdm710
-TARGET_BOARD_INFO_FILE := device/google/bonito/board-info.txt
 USES_DEVICE_GOOGLE_B4S4 := true
 TARGET_NO_BOOTLOADER := true
 
@@ -33,15 +32,12 @@ TARGET_2ND_CPU_VARIANT := cortex-a75
 
 TARGET_BOARD_COMMON_PATH := device/google/bonito/sdm710
 
-BUILD_BROKEN_DUP_RULES := true
-
 BOARD_KERNEL_CMDLINE += console=ttyMSM0,115200n8 androidboot.console=ttyMSM0 printk.devkmsg=on
 BOARD_KERNEL_CMDLINE += msm_rtb.filter=0x237
 BOARD_KERNEL_CMDLINE += ehci-hcd.park=3
 BOARD_KERNEL_CMDLINE += service_locator.enable=1
 BOARD_KERNEL_CMDLINE += firmware_class.path=/vendor/firmware
 BOARD_KERNEL_CMDLINE += cgroup.memory=nokmem
-# STOPSHIP Bringup hack- no low power
 BOARD_KERNEL_CMDLINE += lpm_levels.sleep_disabled=1
 BOARD_KERNEL_CMDLINE += loop.max_part=7
 BOARD_KERNEL_CMDLINE += androidboot.fastboot=1
@@ -94,146 +90,24 @@ TARGET_RECOVERY_TWRP_LIB := \
   libnos_citadel_for_recovery \
   libnos_for_recovery liblog
 
-# Enable chain partition for system.
-BOARD_AVB_SYSTEM_KEY_PATH := external/avb/test/data/testkey_rsa2048.pem
-BOARD_AVB_SYSTEM_ALGORITHM := SHA256_RSA2048
-BOARD_AVB_SYSTEM_ROLLBACK_INDEX := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
-BOARD_AVB_SYSTEM_ROLLBACK_INDEX_LOCATION := 1
-
-BOARD_PROPERTY_OVERRIDES_SPLIT_ENABLED := true
-
-# system.img
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 3267362816
 BOARD_SYSTEMIMAGE_JOURNAL_SIZE := 0
 BOARD_SYSTEMIMAGE_EXTFS_INODE_COUNT := 4096
-
-# userdata.img
 TARGET_USERIMAGES_USE_EXT4 := true
-
-# persist.img
 BOARD_PERSISTIMAGE_PARTITION_SIZE := 41943040
 BOARD_PERSISTIMAGE_FILE_SYSTEM_TYPE := ext4
-
-# boot.img
 BOARD_BOOTIMAGE_PARTITION_SIZE := 0x04000000
 
 TARGET_COPY_OUT_VENDOR := vendor
 
 BOARD_FLASH_BLOCK_SIZE := 131072
 
-# Install odex files into the other system image
-BOARD_USES_SYSTEM_OTHER_ODEX := true
-
 BOARD_ROOT_EXTRA_SYMLINKS := /mnt/vendor/persist:/persist
 BOARD_ROOT_EXTRA_SYMLINKS += /vendor/firmware_mnt:/firmware
 BOARD_ROOT_EXTRA_SYMLINKS += /vendor/dsp:/dsp
 
-TARGET_FS_CONFIG_GEN := device/google/bonito/config.fs
-
-QCOM_BOARD_PLATFORMS += sdm710
-BOARD_HAVE_BLUETOOTH_QCOM := true
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/google/bonito/bluetooth
-
-# Enable dex pre-opt to speed up initial boot
-ifeq ($(HOST_OS),linux)
-  ifeq ($(WITH_DEXPREOPT),)
-    WITH_DEXPREOPT := true
-    WITH_DEXPREOPT_PIC := true
-    ifneq ($(TARGET_BUILD_VARIANT),user)
-      # Retain classes.dex in APK's for non-user builds
-      DEX_PREOPT_DEFAULT := nostripping
-    endif
-  endif
-endif
-
-# Camera
-TARGET_USES_AOSP := true
-BOARD_QTI_CAMERA_32BIT_ONLY := false
-CAMERA_DAEMON_NOT_PRESENT := true
-TARGET_USES_ION := true
-TARGET_USES_EASEL := true
-BOARD_USES_EASEL := true
-
-# GPS
-TARGET_NO_RPC := true
-BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := default
-BOARD_VENDOR_QCOM_LOC_PDK_FEATURE_SET := true
-
-# RenderScript
-OVERRIDE_RS_DRIVER := libRSDriver_adreno.so
-
-# Sensors
-USE_SENSOR_MULTI_HAL := true
-TARGET_SUPPORT_DIRECT_REPORT := true
-
-# wlan
-BOARD_WLAN_DEVICE := qcwcn
-BOARD_WPA_SUPPLICANT_DRIVER := NL80211
-BOARD_HOSTAPD_DRIVER := NL80211
-WIFI_DRIVER_DEFAULT := qca_cld3
-WPA_SUPPLICANT_VERSION := VER_0_8_X
-BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
-BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
-WIFI_HIDL_FEATURE_AWARE := true
-WIFI_HIDL_FEATURE_DUAL_INTERFACE:= true
-
-# Audio
-BOARD_USES_ALSA_AUDIO := true
-USE_XML_AUDIO_POLICY_CONF := 1
-AUDIO_FEATURE_ENABLED_MULTI_VOICE_SESSIONS := true
-AUDIO_FEATURE_ENABLED_SND_MONITOR := true
-AUDIO_FEATURE_ENABLED_USB_TUNNEL := true
-AUDIO_FEATURE_ENABLED_CIRRUS_SPKR_PROTECTION := true
-BOARD_SUPPORTS_SOUND_TRIGGER := true
-AUDIO_FEATURE_FLICKER_SENSOR_INPUT := true
-SOUND_TRIGGER_FEATURE_LPMA_ENABLED := true
-AUDIO_FEATURE_ENABLED_MAXX_AUDIO := true
-BOARD_SUPPORTS_SOUND_TRIGGER_5514 := true
-AUDIO_FEATURE_ENABLED_24BITS_CAMCORDER := true
-
-# Graphics
-TARGET_USES_GRALLOC1 := true
-TARGET_USES_HWC2 := true
-
-VSYNC_EVENT_PHASE_OFFSET_NS := 2000000
-SF_VSYNC_EVENT_PHASE_OFFSET_NS := 6000000
-
-# Display
-TARGET_HAS_WIDE_COLOR_DISPLAY := true
-TARGET_HAS_HDR_DISPLAY := true
-TARGET_USES_DISPLAY_RENDER_INTENTS := true
-TARGET_USES_COLOR_METADATA := true
-TARGET_USES_DRM_PP := true
-
-# Charger Mode
-BOARD_CHARGER_ENABLE_SUSPEND := true
-
-# Vendor Interface Manifest
-DEVICE_MANIFEST_FILE := device/google/bonito/manifest.xml
-DEVICE_MATRIX_FILE := device/google/bonito/compatibility_matrix.xml
-DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := device/google/bonito/device_framework_matrix.xml
-DEVICE_FRAMEWORK_MANIFEST_FILE := device/google/bonito/framework_manifest.xml
-
-# Userdebug only Vendor Interface Manifest
-ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
-DEVICE_MANIFEST_FILE += device/google/bonito/manifest_userdebug.xml
-endif
-
-# Remove health /backup instance
-DEVICE_FRAMEWORK_MANIFEST_FILE += system/libhidl/vintfdata/manifest_healthd_exclude.xml
-
-BOARD_PROPERTY_OVERRIDES_SPLIT_ENABLED := true
-
 # Use mke2fs to create ext4 images
 TARGET_USES_MKE2FS := true
-
-# Kernel modules
-
-# Testing related defines
-BOARD_PERFSETUP_SCRIPT := platform_testing/scripts/perf-setup/b4s4-setup.sh
-
-# Single vendor RIL with SDM845
-BOARD_USES_SDM845_QCRIL := true
 
 # TWRP
 TW_THEME := portrait_hdpi
@@ -249,7 +123,4 @@ TWRP_INCLUDE_LOGCAT := true
 TW_NO_HAPTICS := true
 PLATFORM_SECURITY_PATCH := 2025-12-31
 TW_USE_TOOLBOX := true
-TW_EXCLUDE_TWRPAPP := true
-USE_RECOVERY_INSTALLER := true
-RECOVERY_INSTALLER_PATH := device/google/bonito/installer
 LZMA_RAMDISK_TARGETS := recovery
