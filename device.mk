@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-ifeq ($(filter bonito sargo, $(TARGET_PRODUCT)),)
+ifeq ($(TARGET_OTA_ASSERT_DEVICE), bonito, sargo)
 TARGET_CHIPSET := sdm710
 else
 TARGET_CHIPSET := sdm845
@@ -22,7 +22,7 @@ endif
 
 LOCAL_PATH := device/google/boncross
 
-ifeq ($(filter bonito sargo, $(TARGET_PRODUCT)),)
+ifeq ($(TARGET_OTA_ASSERT_DEVICE), bonito, sargo)
 TARGET_SYSTEM_PROP := $(LOCAL_PATH)/sarbon/system.prop
 else
 TARGET_SYSTEM_PROP := $(LOCAL_PATH)/bluecross/system.prop
@@ -38,7 +38,7 @@ PRODUCT_PACKAGES += \
     update_engine \
     update_verifier
 
-ifeq ($(filter bonito sargo, $(TARGET_PRODUCT)),)
+ifeq ($(TARGET_OTA_ASSERT_DEVICE), bonito, sargo)
 PRODUCT_PACKAGES += \
     bootctrl.sdm710
 else
@@ -62,7 +62,7 @@ AB_OTA_POSTINSTALL_CONFIG += \
 
 # Enable update engine sideloading by including the static version of the
 # boot_control HAL and its dependencies.
-ifeq ($(filter bonito sargo, $(TARGET_PRODUCT)),)
+ifeq ($(TARGET_OTA_ASSERT_DEVICE), bonito, sargo)
 PRODUCT_STATIC_BOOT_CONTROL_HAL := \
     bootctrl.sdm710
 else

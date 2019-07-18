@@ -14,7 +14,9 @@
 # limitations under the License.
 #
 
-ifeq ($(filter bonito sargo, $(TARGET_PRODUCT)),)
+$(TARGET_OTA_ASSERT_DEVICE := blueline,bonito,crosshatch,sargo
+
+ifeq ($(TARGET_OTA_ASSERT_DEVICE), bonito, sargo)
 TARGET_BOARD_PLATFORM := sdm710
 else
 TARGET_BOARD_PLATFORM := sdm845
@@ -46,7 +48,7 @@ BOARD_KERNEL_CMDLINE += lpm_levels.sleep_disabled=1
 BOARD_KERNEL_CMDLINE += androidboot.fastboot=1
 BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 
-ifeq ($(filter bonito sargo, $(TARGET_PRODUCT)),)
+ifeq ($(TARGET_OTA_ASSERT_DEVICE), bonito, sargo)
 BOARD_KERNEL_CMDLINE += loop.max_part=7
 else
 BOARD_KERNEL_CMDLINE += usbcore.autosuspend=7
@@ -55,7 +57,7 @@ endif
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
 BOARD_KERNEL_IMAGE_NAME := Image.lz4-dtb
 
-ifeq ($(filter bonito sargo, $(TARGET_PRODUCT)),)
+ifeq ($(TARGET_OTA_ASSERT_DEVICE), bonito, sargo)
 TARGET_KERNEL_SOURCE := kernel/google/bonito
 TARGET_KERNEL_CONFIG := bonito_defconfig
 else
@@ -65,15 +67,12 @@ endif
 
 BOARD_KERNEL_BASE        := 0x00000000
 BOARD_KERNEL_PAGESIZE    := 4096
-ifeq ($(filter-out bonito_kasan sargo_kasan, $(TARGET_PRODUCT)),)
 BOARD_KERNEL_OFFSET      := 0x80000
 BOARD_KERNEL_TAGS_OFFSET := 0x02500000
 BOARD_RAMDISK_OFFSET     := 0x02700000
 BOARD_MKBOOTIMG_ARGS     := --kernel_offset $(BOARD_KERNEL_OFFSET) --ramdisk_offset $(BOARD_RAMDISK_OFFSET) --tags_offset $(BOARD_KERNEL_TAGS_OFFSET)
-else
 BOARD_KERNEL_TAGS_OFFSET := 0x01E00000
 BOARD_RAMDISK_OFFSET     := 0x02000000
-endif
 
 BOARD_BOOT_HEADER_VERSION := 1
 BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
@@ -86,7 +85,7 @@ BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
 BOARD_USES_METADATA_PARTITION := true
 
 # Partitions (listed in the file) to be wiped under recovery.
-ifeq ($(filter bonito sargo, $(TARGET_PRODUCT)),)
+ifeq ($(TARGET_OTA_ASSERT_DEVICE), bonito, sargo)
 TARGET_RECOVERY_WIPE := device/google/boncross/sarbon/recovery.wipe
 TARGET_RECOVERY_FSTAB := device/google/boncross/sarbon/fstab.hardware
 TARGET_RECOVERY_UI_LIB := \
@@ -114,7 +113,7 @@ TARGET_RECOVERY_TWRP_LIB := \
   libnos_for_recovery liblog
 
 # Partitions
-ifeq ($(filter bonito sargo, $(TARGET_PRODUCT)),)
+ifeq ($(TARGET_OTA_ASSERT_DEVICE), bonito, sargo)
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 3267362816
 else
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 2952790016
