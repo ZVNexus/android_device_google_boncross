@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2018 The Android Open Source Project
+// Copyright (C) 2019 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ cc_library_static {
         "-pedantic",
     ],
     srcs: [
-        "recovery_ui.cpp",
+        "recovery_bonito_ui.cpp",
     ],
     include_dirs: [
         "bootable/recovery"
@@ -46,7 +46,51 @@ cc_library_static {
         "-pedantic",
     ],
     srcs: [
-        "recovery_twrp.cpp",
+        "recovery_bonito_twrp.cpp",
+    ],
+    include_dirs: [
+        "bootable/recovery"
+    ],
+    static_libs: [
+        "libbase",
+        "libnos_for_recovery",
+        "libnos_citadel_for_recovery",
+    ],
+}
+
+cc_library_static {
+    name: "librecovery_ui_crosshatch",
+    owner: "google",
+    cflags: [
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+    ],
+    srcs: [
+        "recovery_crosshatch_ui.cpp",
+    ],
+    include_dirs: [
+        "bootable/recovery"
+    ],
+    static_libs: [
+        "libbase",
+        "libnos_for_recovery",
+        "libnos_citadel_for_recovery",
+    ],
+}
+
+cc_library_static {
+    name: "librecovery_twrp_crosshatch",
+    owner: "google",
+    cflags: [
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+    ],
+    srcs: [
+        "recovery_crosshatch_twrp.cpp",
     ],
     include_dirs: [
         "bootable/recovery"
