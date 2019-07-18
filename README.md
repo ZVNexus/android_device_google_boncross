@@ -1,6 +1,6 @@
-# Device Tree for Google Pixel 3A/XL (bonito/sargo)
+# Device Tree for Google Pixel 3/a/XL (bluecross/bonito/crosshatch/sargo)
 
-The Google Pixel 3A/XL (codenamed _"bonito/sargo"_) is a flagship smartphone from Google.
+The Google Pixel 3/a/XL (codenamed _"bonito/sargo"_) is a flagship smartphone from Google.
 It was released in May 2019.
 
 ## Compile
@@ -21,8 +21,8 @@ Finally execute these:
 ```
 . build/envsetup.sh
 export ALLOW_MISSING_DEPENDENCIES=true
-lunch omni_bonito-eng or lunch omni_sargo-eng 
-mka recoveryimage bootimage 
+lunch omni_bonito-eng or omni_sargo-eng or omni_blueline-eng or omni_crosshatch-eng  
+mka recoveryimage bootimage
 ```
 
 To test it:

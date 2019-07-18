@@ -23,7 +23,7 @@ $(call inherit-product, build/target/product/embedded.mk)
 # Inherit from our custom product configuration
 $(call inherit-product, vendor/omni/config/common.mk)
 
-$(call inherit-product, device/google/bonito/device-sargo.mk)
+$(call inherit-product, device/google/boncross/device-sargo.mk)
 
 PRODUCT_MANUFACTURER := Google
 PRODUCT_BRAND := Android

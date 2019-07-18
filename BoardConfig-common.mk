@@ -14,7 +14,13 @@
 # limitations under the License.
 #
 
+ifeq ($(filter bonito sargo, $(TARGET_PRODUCT)),)
 TARGET_BOARD_PLATFORM := sdm710
+else
+TARGET_BOARD_PLATFORM := sdm845
+endif
+
+USES_DEVICE_GOOGLE_B1C1 := true
 USES_DEVICE_GOOGLE_B4S4 := true
 TARGET_NO_BOOTLOADER := true
 
@@ -30,8 +36,6 @@ TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := cortex-a75
 
-TARGET_BOARD_COMMON_PATH := device/google/bonito/sdm710
-
 BOARD_KERNEL_CMDLINE += console=ttyMSM0,115200n8 androidboot.console=ttyMSM0 printk.devkmsg=on
 BOARD_KERNEL_CMDLINE += msm_rtb.filter=0x237
 BOARD_KERNEL_CMDLINE += ehci-hcd.park=3
@@ -39,13 +43,25 @@ BOARD_KERNEL_CMDLINE += service_locator.enable=1
 BOARD_KERNEL_CMDLINE += firmware_class.path=/vendor/firmware
 BOARD_KERNEL_CMDLINE += cgroup.memory=nokmem
 BOARD_KERNEL_CMDLINE += lpm_levels.sleep_disabled=1
-BOARD_KERNEL_CMDLINE += loop.max_part=7
 BOARD_KERNEL_CMDLINE += androidboot.fastboot=1
 BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
+
+ifeq ($(filter bonito sargo, $(TARGET_PRODUCT)),)
+BOARD_KERNEL_CMDLINE += loop.max_part=7
+else
+BOARD_KERNEL_CMDLINE += usbcore.autosuspend=7
+endif
+
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
+BOARD_KERNEL_IMAGE_NAME := Image.lz4-dtb
+
+ifeq ($(filter bonito sargo, $(TARGET_PRODUCT)),)
 TARGET_KERNEL_SOURCE := kernel/google/bonito
 TARGET_KERNEL_CONFIG := bonito_defconfig
-BOARD_KERNEL_IMAGE_NAME := Image.lz4-dtb
+else
+TARGET_KERNEL_SOURCE := kernel/google/bluecross
+TARGET_KERNEL_CONFIG := b1c1_defconfig
+endif
 
 BOARD_KERNEL_BASE        := 0x00000000
 BOARD_KERNEL_PAGESIZE    := 4096
@@ -62,10 +78,6 @@ endif
 BOARD_BOOT_HEADER_VERSION := 1
 BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
 
-# DTBO partition definitions
-BOARD_PREBUILT_DTBOIMAGE := device/google/bonito-kernel/dtbo.img
-BOARD_DTBOIMG_PARTITION_SIZE := 8388608
-
 TARGET_NO_BOOTLOADER ?= true
 TARGET_NO_KERNEL := false
 TARGET_NO_RECOVERY := true
@@ -74,39 +86,55 @@ BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
 BOARD_USES_METADATA_PARTITION := true
 
 # Partitions (listed in the file) to be wiped under recovery.
-TARGET_RECOVERY_WIPE := device/google/bonito/recovery.wipe
-TARGET_RECOVERY_FSTAB := device/google/bonito/fstab.hardware
-TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
+ifeq ($(filter bonito sargo, $(TARGET_PRODUCT)),)
+TARGET_RECOVERY_WIPE := device/google/boncross/sarbon/recovery.wipe
+TARGET_RECOVERY_FSTAB := device/google/boncross/sarbon/fstab.hardware
 TARGET_RECOVERY_UI_LIB := \
   librecovery_ui_bonito \
+
+TARGET_RECOVERY_TWRP_LIB := \
+  librecovery_twrp_bonito
+else
+TARGET_RECOVERY_WIPE := device/google/boncross/bluecross/recovery.wipe
+TARGET_RECOVERY_FSTAB := device/google/boncross/bluecross/fstab.hardware
+TARGET_RECOVERY_UI_LIB := \
+  librecovery_ui_crosshatch \
+
+TARGET_RECOVERY_TWRP_LIB := \
+  librecovery_twrp_crosshatch
+endif
+
+TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
+TARGET_RECOVERY_UI_LIB := \
   libnos_citadel_for_recovery \
   libnos_for_recovery
 
-BOARD_AVB_ENABLE := true
-BOARD_AVB_ROLLBACK_INDEX := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
-
 TARGET_RECOVERY_TWRP_LIB := \
-  librecovery_twrp_bonito \
   libnos_citadel_for_recovery \
   libnos_for_recovery liblog
 
+# Partitions
+ifeq ($(filter bonito sargo, $(TARGET_PRODUCT)),)
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 3267362816
+else
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 2952790016
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 10737418240
+BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := f2fs
+endif
+
 BOARD_SYSTEMIMAGE_JOURNAL_SIZE := 0
 BOARD_SYSTEMIMAGE_EXTFS_INODE_COUNT := 4096
 TARGET_USERIMAGES_USE_EXT4 := true
-BOARD_PERSISTIMAGE_PARTITION_SIZE := 41943040
-BOARD_PERSISTIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_BOOTIMAGE_PARTITION_SIZE := 0x04000000
+BOARD_FLASH_BLOCK_SIZE := 131072
 
 TARGET_COPY_OUT_VENDOR := vendor
-
-BOARD_FLASH_BLOCK_SIZE := 131072
 
 BOARD_ROOT_EXTRA_SYMLINKS := /mnt/vendor/persist:/persist
 BOARD_ROOT_EXTRA_SYMLINKS += /vendor/firmware_mnt:/firmware
 BOARD_ROOT_EXTRA_SYMLINKS += /vendor/dsp:/dsp
 
-# Use mke2fs to create ext4 images
+# Use MKE2FS to create EXT4 images
 TARGET_USES_MKE2FS := true
 
 # TWRP

@@ -20,4 +20,4 @@ PRODUCT_AAPT_PREBUILT_DPI := xxhdpi xhdpi hdpi
 
 PRODUCT_HARDWARE := bonito
 
-include device/google/bonito/device-common.mk
+include device/google/boncross/device-common.mk

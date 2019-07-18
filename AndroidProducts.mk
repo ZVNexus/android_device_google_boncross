@@ -15,5 +15,7 @@
 #
 
 PRODUCT_MAKEFILES := \
+    $(LOCAL_DIR)/omni_blueline.mk \
     $(LOCAL_DIR)/omni_bonito.mk \
+    $(LOCAL_DIR)/omni_crosshatch.mk \
     $(LOCAL_DIR)/omni_sargo.mk \

@@ -1,5 +1,5 @@
 #
-# Copyright 2016 The Android Open Source Project
+# Copyright 2019 The Android Open Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,10 +14,19 @@
 # limitations under the License.
 #
 
-PRODUCT_AAPT_CONFIG := normal
-PRODUCT_AAPT_PREF_CONFIG := xxhdpi
-PRODUCT_AAPT_PREBUILT_DPI := xxhdpi xhdpi hdpi
+# Release name
+PRODUCT_RELEASE_NAME := blueline
 
-PRODUCT_HARDWARE := sargo
+# Inherit from the common Open Source product configuration
+$(call inherit-product, build/target/product/embedded.mk)
 
-include device/google/boncross/device-common.mk
+# Inherit from our custom product configuration
+$(call inherit-product, vendor/omni/config/common.mk)
+
+$(call inherit-product, device/google/boncross/device-blueline.mk)
+
+PRODUCT_MANUFACTURER := Google
+PRODUCT_BRAND := Android
+PRODUCT_NAME := omni_blueline
+PRODUCT_DEVICE := blueline
+PRODUCT_MODEL := Pixel 3

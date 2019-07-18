@@ -14,5 +14,7 @@
 # limitations under the License.
 #
 
+add_lunch_combo omni_blueline-eng
 add_lunch_combo omni_bonito-eng
+add_lunch_combo omni_crosshatch-eng
 add_lunch_combo omni_sargo-eng

@@ -18,6 +18,6 @@ PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 PRODUCT_AAPT_PREBUILT_DPI := xxhdpi xhdpi hdpi
 
-PRODUCT_HARDWARE := sargo
+PRODUCT_HARDWARE := blueline
 
 include device/google/boncross/device-common.mk

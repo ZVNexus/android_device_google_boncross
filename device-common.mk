@@ -16,19 +16,18 @@
 
 TARGET_USERIMAGES_USE_F2FS := true
 
-LOCAL_PATH := device/google/bonito
+LOCAL_PATH := device/google/boncross
 
 # define hardware platform
 PRODUCT_PLATFORM := sdm670
 
-include device/google/bonito/device.mk
+include device/google/boncross/device.mk
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/recovery/root/plat_hwservice_contexts:recovery/root/plat_hwservice_contexts \
     $(LOCAL_PATH)/recovery/root/plat_service_contexts:recovery/root/plat_service_contexts \
     $(LOCAL_PATH)/recovery/root/vendor_hwservice_contexts:recovery/root/vendor_hwservice_contexts \
     $(LOCAL_PATH)/recovery/root/vndservice_contexts:recovery/root/vndservice_contexts \
-    $(LOCAL_PATH)/recovery/root/etc/twrp.fstab:recovery/root/etc/twrp.fstab \
     $(LOCAL_PATH)/recovery/root/sbin/android.hardware.boot@1.0-service:recovery/root/sbin/android.hardware.boot@1.0-service \
     $(LOCAL_PATH)/recovery/root/sbin/android.hardware.confirmationui@1.0.so:recovery/root/sbin/android.hardware.confirmationui@1.0.so \
     $(LOCAL_PATH)/recovery/root/sbin/android.hardware.keymaster@4.0-service-qti:recovery/root/sbin/android.hardware.keymaster@4.0-service-qti \
@@ -75,5 +74,16 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/recovery/root/vendor/lib64/libnos_transport.so:recovery/root/vendor/lib64/libnos_transport.so \
     $(LOCAL_PATH)/recovery/root/vendor/lib64/libqtikeymaster4.so:recovery/root/vendor/lib64/libqtikeymaster4.so \
     $(LOCAL_PATH)/recovery/root/vendor/lib64/nos_app_weaver.so:recovery/root/vendor/lib64/nos_app_weaver.so \
-    $(LOCAL_PATH)/recovery/root/vendor/lib64/hw/android.hardware.boot@1.0-impl.so:recovery/root/vendor/lib64/hw/android.hardware.boot@1.0-impl.so \
-    $(LOCAL_PATH)/recovery/root/vendor/lib64/hw/bootctrl.sdm710.so:recovery/root/vendor/lib64/hw/bootctrl.sdm710.so
+    $(LOCAL_PATH)/recovery/root/vendor/lib64/hw/android.hardware.boot@1.0-impl.so:recovery/root/vendor/lib64/hw/android.hardware.boot@1.0-impl.so
+
+ifeq ($(filter bonito sargo, $(TARGET_PRODUCT)),)
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/sarbon/twrp.fstab:recovery/root/etc/twrp.fstab \
+    $(LOCAL_PATH)/sarbon/ueventd.hardware.rc:recovery/root/ueventd.hardware.rc \
+    $(LOCAL_PATH)/sarbon/bootctrl.sdm710.so:recovery/root/vendor/lib64/hw/bootctrl.sdm710.so
+else
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/bluecross/twrp.fstab:recovery/root/twrp.fstab \
+    $(LOCAL_PATH)/bluecross/ueventd.hardware.rc:recovery/root/ueventd.hardware.rc \
+    $(LOCAL_PATH)/bluecross/bootctrl.sdm845.so:recovery/root/vendor/lib64/hw/bootctrl.sdm845.so
+endif

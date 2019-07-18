@@ -1,5 +1,5 @@
 #
-# Copyright 2016 The Android Open Source Project
+# Copyright (C) 2016 The Android Open-Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,10 +14,7 @@
 # limitations under the License.
 #
 
-PRODUCT_AAPT_CONFIG := normal
-PRODUCT_AAPT_PREF_CONFIG := xxhdpi
-PRODUCT_AAPT_PREBUILT_DPI := xxhdpi xhdpi hdpi
+TARGET_BOOTLOADER_BOARD_NAME := crosshatch
+TARGET_RECOVERY_UI_MARGIN_HEIGHT := 165
 
-PRODUCT_HARDWARE := sargo
-
-include device/google/boncross/device-common.mk
+include device/google/boncross/BoardConfig-common.mk

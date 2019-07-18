@@ -14,15 +14,22 @@
 # limitations under the License.
 #
 
+ifeq ($(filter bonito sargo, $(TARGET_PRODUCT)),)
 TARGET_CHIPSET := sdm710
+else
+TARGET_CHIPSET := sdm845
+endif
 
-LOCAL_PATH := device/google/bonito
+LOCAL_PATH := device/google/boncross
 
-TARGET_SYSTEM_PROP := $(LOCAL_PATH)/system.prop
+ifeq ($(filter bonito sargo, $(TARGET_PRODUCT)),)
+TARGET_SYSTEM_PROP := $(LOCAL_PATH)/sarbon/system.prop
+else
+TARGET_SYSTEM_PROP := $(LOCAL_PATH)/bluecross/system.prop
+endif
 
 PRODUCT_CHARACTERISTICS := nosdcard
 PRODUCT_SHIPPING_API_LEVEL := 28
-
 
 # A/B support
 PRODUCT_PACKAGES += \
@@ -31,8 +38,13 @@ PRODUCT_PACKAGES += \
     update_engine \
     update_verifier
 
+ifeq ($(filter bonito sargo, $(TARGET_PRODUCT)),)
 PRODUCT_PACKAGES += \
     bootctrl.sdm710
+else
+PRODUCT_PACKAGES += \
+    bootctrl.sdm845
+endif
 
 AB_OTA_UPDATER := true
 
@@ -50,15 +62,17 @@ AB_OTA_POSTINSTALL_CONFIG += \
 
 # Enable update engine sideloading by including the static version of the
 # boot_control HAL and its dependencies.
+ifeq ($(filter bonito sargo, $(TARGET_PRODUCT)),)
 PRODUCT_STATIC_BOOT_CONTROL_HAL := \
-    bootctrl.sdm710 \
+    bootctrl.sdm710
+else
+PRODUCT_STATIC_BOOT_CONTROL_HAL := \
+    bootctrl.sdm845
+endif
+PRODUCT_STATIC_BOOT_CONTROL_HAL := \
     libgptutils \
     libz \
     libcutils
-
-PRODUCT_PACKAGES += \
-    update_engine_sideload \
-    sg_write_buffer
 
 # Boot control HAL
 PRODUCT_PACKAGES += \
